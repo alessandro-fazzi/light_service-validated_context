@@ -1,0 +1,13 @@
+inherit_gem:
+  light-service: .rubocop.yml
+
+AllCops:
+  TargetRubyVersion: 3.1
+  Exclude:
+    - "bin/*"
+
+Gemspec:
+  DateAssignment:
+    Enabled: false
+  DeprecatedAttributeAssignment:
+    Enabled: true
