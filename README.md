@@ -39,6 +39,12 @@ And then execute:
 
     $ bundle install
 
+Would you need to manualy require the gem, here's the syntax:
+
+```ruby
+require 'light_service/validated_context'
+```
+
 ## Usage
 
 ```ruby
