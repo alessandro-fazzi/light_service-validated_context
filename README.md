@@ -1,4 +1,4 @@
-# LightService::ValidatedContext
+****# LightService::ValidatedContext
 
 This gem _patches_ `light-service` gem implementing validated keys
 for `expects` and `promises` action's macros.
@@ -44,10 +44,10 @@ And then execute:
 class ActionOne
   extend LightService::Action
 
-  expects VK.new(:email, Types::Strict::String)
-  expects VK.new(:age, Types::Coercible::Integer.constrained(gt: 30))
-  expects VK.new(:ary, Types::Array.of(Types::Strict::Symbol).constrained(min_size: 1))
-  promises VK.new(:text, Types::Strict::String.constrained(max_size: 10).default('foobar'))
+  expects VK.(:email, Types::Strict::String)
+  expects VK.(:age, Types::Coercible::Integer.constrained(gt: 30))
+  expects VK.(:ary, Types::Array.of(Types::Strict::Symbol).constrained(min_size: 1))
+  promises VK.(:text, Types::Strict::String.constrained(max_size: 10).default('foobar'))
 
   executed do |context|
     # something happens
@@ -69,6 +69,12 @@ read more about what you can achieve at https://dry-rb.org/gems/dry-types/1.2/
 
 - key name as a symbol
 - A type
+
+`VK` and `ValidatedKey` (equivalent) are short aliases for `LightService::Context::ValidatedKey`.
+They are created only if not already defined in the global space. You're free to use the namespaced
+form to avoid name collisions.
+
+You can find more usage example in `spec/support/test_doubles.rb`
 
 ## Development
 

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "light_service/validated_context"
-require "debug"
 require_relative "support/test_doubles"
+require "debug"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

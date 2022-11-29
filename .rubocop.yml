@@ -6,8 +6,5 @@ AllCops:
   Exclude:
     - "bin/*"
 
-Gemspec:
-  DateAssignment:
-    Enabled: false
-  DeprecatedAttributeAssignment:
-    Enabled: true
+Style/LambdaCall:
+  Enabled: false

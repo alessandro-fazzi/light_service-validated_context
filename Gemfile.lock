@@ -3,7 +3,8 @@ PATH
   specs:
     light_service-validated_context (0.1.0)
       dry-types (~> 1.7.0)
-      light-service (~> 0.18.0)
+      light-service (>= 0.18.0)
+      zeitwerk
 
 GEM
   remote: https://rubygems.org/
