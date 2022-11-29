@@ -5,6 +5,7 @@ AllCops:
   TargetRubyVersion: 3.1
   Exclude:
     - "bin/*"
+    - 'vendor/bundle/**/*'
 
 Style/LambdaCall:
   Enabled: false
