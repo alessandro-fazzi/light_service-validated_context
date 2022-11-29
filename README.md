@@ -1,4 +1,4 @@
-****# LightService::ValidatedContext
+# LightService - ValidatedContext
 
 This gem _patches_ `light-service` gem implementing validated keys
 for `expects` and `promises` action's macros.
@@ -14,10 +14,9 @@ This gem is a plugin to `light-service`, thus it depends on it (~> 0.18.0).
 
 ## Stability, affordability
 
-This plugin uses monkey patching in order to alter the behaviour of the main gem.
+This plugin uses monkey patching in order to alter the behaviour of `light-service`.
 AFAIK this is the only way to achieve the goal. Because of this fact I consider
 `light_service-validated_context` more of an experiment/POC.
-
 
 ## Goals
 
@@ -84,7 +83,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/light_service-validated_context. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/light_service-validated_context/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/pioneerskies/light_service-validated_context. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/pioneerskies/light_service-validated_context/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -92,4 +91,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the LightService::ValidatedContext project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/light_service-validated_context/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the LightService::ValidatedContext project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/pioneerskies/light_service-validated_context/blob/main/CODE_OF_CONDUCT.md).
