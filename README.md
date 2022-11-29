@@ -51,10 +51,10 @@ require 'light_service/validated_context'
 class ActionOne
   extend LightService::Action
 
-  expects VK.(:email, Types::Strict::String)
-  expects VK.(:age, Types::Coercible::Integer.constrained(gt: 30))
-  expects VK.(:ary, Types::Array.of(Types::Strict::Symbol).constrained(min_size: 1))
-  promises VK.(:text, Types::Strict::String.constrained(max_size: 10).default('foobar'))
+  expects VK.new(:email, Types::Strict::String)
+  expects VK.new(:age, Types::Coercible::Integer.constrained(gt: 30))
+  expects VK.new(:ary, Types::Array.of(Types::Strict::Symbol).constrained(min_size: 1))
+  promises VK.new(:text, Types::Strict::String.constrained(max_size: 10).default('foobar'))
 
   executed do |context|
     # something happens

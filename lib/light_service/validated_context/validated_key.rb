@@ -2,10 +2,6 @@
 
 module ValidatedContext
   ValidatedKey = Struct.new(:label, :type) do
-    def self.call(*args)
-      new(*args)
-    end
-
     def to_sym
       label.to_sym
     end
