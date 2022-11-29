@@ -1,5 +1,7 @@
 # LightService - ValidatedContext
 
+[![Ruby](https://github.com/pioneerskies/light_service-validated_context/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/pioneerskies/light_service-validated_context/actions/workflows/main.yml)
+
 This gem _patches_ `light-service` gem implementing validated keys
 for `expects` and `promises` action's macros.
 
