@@ -83,6 +83,70 @@ form to avoid name collisions.
 
 You can find more usage example in `spec/support/test_doubles.rb`
 
+## Why validation matters?
+
+In OO programming there's a rule (strict or "of thumb", IDK) that says to "never" instantiate an
+invalid object whenever the object self has the concept of _validity_ for itself. This rule takes
+sense to my eyes whenever I'm working with an object already initialized and in memory, but I cannot
+trust its internal status.
+
+Taken that `light-service` doesn't work on instances, but it works on classes and class methods
+having a more functional and stateless approach, side effects of having invalid state in the context
+(which is The state of an Action/Organizer) are mostly the same.
+
+Rewording: if I cannot trust the state, given
+the state is internal or delegated to a context object, I'll have to to a bunch of validation-oriented
+logical branches into my logic. E.g.:
+
+```ruby
+class HugAFriend
+  extend LightService::Action
+
+  expects :friend
+
+  executed do |context|
+    context.friend.hug if context.friend.respond_to?(:hug)
+  end
+end
+```
+
+The `if` in this uber-trivial example exists just due to lack of trust on the state.
+
+Let's re-imagine the code given an `executed` block that totally trusts the context:
+
+
+```ruby
+class HugAFriend
+  extend LightService::Action
+
+  expects VK.new(:friend, Types.Instance(Friend))
+  # Or a less usual approach could be to trust duck typing
+  # expects VK.new(:friend, Types::Interface(:hug))
+
+  executed do |context|
+    context.friend.hug
+  end
+end
+```
+
+## Comparison with similar gems
+
+This is a comparison table I've done using my own limited experience w/ other solutions
+and/or reading projects' READMEs. Don't take my word for it. And if I was wrong understanding
+some features, feel free to drop me a line on Mastodon [@alessandrofazzi@mastodon.uno](https://mastodon.uno/@alessandrofazzi)
+
+| Feature                   | adomokos/light-service | sunny/actor                                          | collectiveidea/interactor | AaronLasseigne/active_interaction | pioneerskies/light_service-validated_context/ |
+| ------------------------- | ---------------------- | ---------------------------------------------------- | ------------------------- | --------------------------------- | --------------------------------------------- |
+| presence                  | ✅                      | ✅                                                    | ❌                         | ⚠️ Only input, not output   | ✅                                             |
+| static default            | ✅                      | ✅                                                    | ❌                         | ✅                                 | ✅                                             |
+| dynamic default           | ✅                      | ✅                                                    | ❌                         | ✅                                 | ✅                                             |
+| raise or fail control     | ❌                      | ✅                                                    | ❌                         | ❓                                 | ❌                                             |
+| type check                | ❌                      | ✅                                                    | ❌                         | ✅                                 | ✅                                             |
+| data structure type check | ❌                      | ❌                                                    | ❌                         | ❌                                 | ✅                                             |
+| optional                  | ⚠️ through `default`    | ✅ through `allow_nil` (which defaults to `true` 🤔 ❓) | ❌                         | ⚠️ through `default`               | ✅                                             |
+| built-in                  | ✅                      | ✅                                                     | ❌                         | ❌ ActiveModel::Validation        | ❌ Dry::Types                                  |
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
