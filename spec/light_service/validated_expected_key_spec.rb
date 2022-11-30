@@ -13,7 +13,7 @@ RSpec.describe 'An action with validated expected keys' do
       it 'raises exception' do
         expect { result }
           .to raise_error(LightService::ExpectedKeysNotInContextError)
-          .with_message('expected :email to be in the context during ActionExpectingStrictString')
+          .with_message(/Undefined violates constraints \(type\?\(String, Undefined\) failed/)
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe 'An action with validated expected keys' do
         it 'raises exception' do
           expect { result }
             .to raise_error(LightService::ExpectedKeysNotInContextError)
-            .with_message('invalid value for Integer(): "fourtytwo"')
+            .with_message(/invalid value for Integer\(\): "fourtytwo"/)
         end
       end
     end

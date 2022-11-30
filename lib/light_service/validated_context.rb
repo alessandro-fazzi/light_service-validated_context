@@ -12,15 +12,17 @@ module ValidatedContext; end
 module LightService
   class Context
     ValidatedKey = ::ValidatedContext::ValidatedKey
-    prepend ::ValidatedContext::ContextOverrides
+    prepend ::ValidatedContext::Context
+
+    class KeyVerifier
+      prepend ::ValidatedContext::KeyVerifier
+    end
 
     class ExpectedKeyVerifier
-      prepend ::ValidatedContext::KeyVerifier
       prepend ::ValidatedContext::ExpectedKeyVerifier
     end
 
     class PromisedKeyVerifier
-      prepend ::ValidatedContext::KeyVerifier
       prepend ::ValidatedContext::PromisedKeyVerifier
     end
   end

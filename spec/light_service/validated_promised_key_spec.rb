@@ -11,7 +11,7 @@ RSpec.describe 'An action with validated promised keys' do
       it 'raises exception' do
         expect { result }
           .to raise_error(LightService::PromisedKeysNotInContextError)
-          .with_message('promised :email to be in the context during ActionPromisingStrictStringButItDoesNot')
+          .with_message(/Undefined violates constraints \(type\?\(String, Undefined\) failed/)
       end
     end
 
@@ -57,7 +57,7 @@ RSpec.describe 'An action with validated promised keys' do
       it 'raises exception' do
         expect { result }
           .to raise_error(LightService::PromisedKeysNotInContextError)
-          .with_message('invalid value for Integer(): "fourtytwo"')
+          .with_message(/invalid value for Integer\(\): "fourtytwo"/)
       end
     end
 
@@ -67,7 +67,7 @@ RSpec.describe 'An action with validated promised keys' do
       it 'raises exception' do
         expect { result }
           .to raise_error(LightService::PromisedKeysNotInContextError)
-          .with_message('"42" violates constraints (lteq?(40, 42) failed)')
+          .with_message(/"42" violates constraints \(lteq\?\(40, 42\) failed\)/)
       end
     end
   end
