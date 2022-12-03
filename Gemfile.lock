@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    light_service-validated_context (0.2.2)
+    light_service-validated_context (0.3.0)
       dry-types (~> 1.7.0)
       light-service (>= 0.18.0)
       zeitwerk
