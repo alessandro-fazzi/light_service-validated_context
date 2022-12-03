@@ -4,6 +4,8 @@ require "light_service/validated_context"
 require_relative "support/test_doubles"
 require "debug"
 
+I18n.load_path += [File.expand_path('spec/support/en.yml')]
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"

@@ -1,0 +1,5 @@
+en:
+  action_with_custom_validation_message_i18n:
+    light_service:
+      failures:
+        an_error_message: Custom validation message from i18n

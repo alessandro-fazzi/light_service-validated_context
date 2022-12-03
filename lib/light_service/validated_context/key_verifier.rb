@@ -2,6 +2,12 @@
 
 module ValidatedContext
   module KeyVerifier
+    def initialize(context, action)
+      @validation_errors = []
+
+      super(context, action)
+    end
+
     def type_check_and_coerce_keys!(keys)
       errors = []
 
@@ -11,10 +17,13 @@ module ValidatedContext
         begin
           context[key.label] = key.type[context[key.label] || Dry::Types::Undefined]
         rescue Dry::Types::CoercionError => e
-          errors << "[#{action}][:#{key.label}] #{e.message}"
+          errors << (
+            LightService::Configuration.localization_adapter.failure(key.message, action) ||
+              "[#{action}][:#{key.label}] #{e.message}"
+          )
         end
       end
-      # debugger
+
       @validation_errors = errors
     end
 
@@ -24,6 +33,13 @@ module ValidatedContext
 
     def error_message
       @validation_errors.join(', ')
+    end
+
+    def should_throw_on_validation_error?
+      return true unless action.respond_to?(:fail_on_validation_error?) && action.fail_on_validation_error?
+
+      context.fail!(error_message)
+      false
     end
   end
 end

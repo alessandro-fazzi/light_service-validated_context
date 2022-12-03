@@ -111,3 +111,45 @@ class ActionExpectingCustomClass
     context
   end
 end
+
+class ActionFailInsteadOfRaise
+  extend LightService::Action
+  extend LightService::Context::FailOnValidationError
+
+  expects VK.new(:foo, Types::String)
+
+  executed do |context|
+    context
+  end
+end
+
+class ActionWithCustomValidationMessage
+  extend LightService::Action
+
+  expects VK.new(:integer, Types::Strict::Integer, :message => 'Custom validation message')
+
+  executed do |context|
+    context
+  end
+end
+
+class ActionWithCustomValidationMessageI18n
+  extend LightService::Action
+
+  expects VK.new(:integer, Types::Strict::Integer, :message => :an_error_message)
+
+  executed do |context|
+    context
+  end
+end
+
+class ActionWithCustomValidationMessageNoRaise
+  extend LightService::Action
+  extend LightService::Context::FailOnValidationError
+
+  expects VK.new(:integer, Types::Strict::Integer, :message => 'Custom validation message')
+
+  executed do |context|
+    context
+  end
+end
