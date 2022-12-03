@@ -23,7 +23,7 @@ AFAIK this is the only way to achieve the goal. Because of this fact I consider
 ## Goals
 
 - implement an advanced and flexible interface to declare,
-type-check, coerce and describe action's arguments without reinventing the wheel (the wheel we use under the wood is [`dry-types`](https://dry-rb.org/gems/dry-types))
+type-check, coerce and describe action's arguments without reinventing the wheel (the wheel we use under the wood is [`dry-types`](https://dry-rb.org/gems/dry-types/main/custom-types/))
 - testing DX and interfaces
 - study what parts of code are involved into this area of `light-service`'s code base
 
@@ -101,7 +101,7 @@ ActionOne.execute(age: 37, text: 'Too long too pass the constrain')
 ```
 
 Since all the validation and coercion logic is delegated to `dry-types`, you can
-read more about what you can achieve at https://dry-rb.org/gems/dry-types/1.2/
+read more about what you can achieve at https://dry-rb.org/gems/dry-types/main/custom-types/
 
 `VK` objects needs to be created with 2 positional arguments:
 
@@ -116,13 +116,14 @@ You can find more usage example in `spec/support/test_doubles.rb`
 
 ### Custom validation error message
 
-You can set a custom validation error message when instantiating a `VK`
+You can set a custom validation error message when instantiating a `VK` object
 
 ```ruby
-VK.new(:my_integer, Types::Strict::Integer, message: 'Custom validatio message for :my_integer key')
+VK.new(:my_integer, Types::Strict::Integer, message: 'Custom validation message for :my_integer key')
 ```
 
-Messages translated via `I18n` are supported too, following stardard `light-service`'s configuration
+Messages translated via `I18n` are supported too, following standard `light-service`'s
+[configuration](https://github.com/adomokos/light-service/#localizing-messages)
 
 ```ruby
 VK.new(:my_integer, Types::Strict::Integer, message: :my_integer_error_message)
@@ -130,10 +131,15 @@ VK.new(:my_integer, Types::Strict::Integer, message: :my_integer_error_message)
 
 ### Raise vs fail
 
-By default, following original `light-service` implementation, a validation error will raise
-and error.
+By default, following original `light-service` implementation, a validation error will raise a
+`LightService::ExpectedKeysNotInContextError` or `LightService::PromisedKeysNotInContextError`.
 
-May you prefere to fail the action populating outcome's message with error message:
+> NOTE: I know that raised exceptions do not express the concept of "invalid", but I opted
+to preserve the original one in order to make this plugin more droppable-in as possible, thus
+w/o breaking code relying on, for example, rescueing those specific excpetions.
+
+May you prefere to fail the action, populating outcome's message with error message, just do
+`extend LightService::Context::FailOnValidationError` into you action:
 
 ```ruby
 class ActionFailInsteadOfRaise
@@ -151,13 +157,45 @@ result = ActionFailInsteadOfRaise.execute(foo: 12)
 result.message # Here you'll find the validation(s) message(s)
 ```
 
+### Custom types
+
+As documented in [dry-types doc](https://dry-rb.org/gems/dry-types/main/getting-started/#creating-your-first-type),
+you can be more expressive defining custom types; you can define them reopening the already defined `LightService::Types` module
+(or simply `Types` in the global namespace if it does not conflict with your domain's namespace), e.g.:
+
+```ruby
+module LightService::Types
+  MyExpressiveThing = Hash.schema(
+    name: String,
+    age: Coercible::Integer,
+    foo: Symbol.constrained(included_in: %i[bar baz])
+  )
+end
+
+class ActionOne
+  extend LightService::Action
+  extend LightService::Context::FailOnValidationError
+
+  expects VK.new(:foo, Types::MyBusinessHash)
+
+  executed do |context|
+    # do something...
+  end
+end
+
+result = App::ActionOne.execute(foo: {
+  name: 'Alessandro',
+  age: '37',
+  foo: :bar
+})
+```
+
+Custom types will be reusable, more expressive and moreover will clean your action up a bit.
+
 ## Why validation matters?
 
-In OO programming there's a rule (strict or "of thumb", IDK) that says to never instantiate an
-invalid object - given the object itself has the concept of _validity_.
-
-How many times do you find yourself working with an object already initialized and in memory, but
-you cannot trust its internal status?
+In OO programming there's a rule that says to never instantiate an
+invalid object.
 
 If you cannot trust the state, given the state is internal or delegated to a context object,
 you'll have to do a bunch of validation-oriented logical branches into your logic. E.g.:
@@ -211,8 +249,11 @@ some features, feel free to drop me a line on Mastodon [@alessandrofazzi@mastodo
 | type check                | ❌                      | ✅                                                    | ❌                         | ✅                                 | ✅                                             |
 | data structure type check | ❌                      | ❌                                                    | ❌                         | ❌                                 | ✅                                             |
 | optional                  | ⚠️ through `default`    | ✅ through `allow_nil` (which defaults to `true` 🤔 ❓) | ❌                         | ⚠️ through `default`               | ✅                                             |
-| 1st party code                | ✅                      | ✅                                                     | ✅                         | ❌ ActiveModel::Validation        | ❌ Dry::Types                                  |
+| 1st party code                | ✅                      | ✅                                                     | ✅                         | ⚠️ ActiveModel::Validation        | ❌ Dry::Types                                  |
 
+> NOTE: in `active_interaction` the fact that validation code isn't first party isn't an issue, since
+> the gem is a Rails-only gem and validation is delegated to Rails, thus no additional dependencies
+> are required. `light_service-validated_context` depends on additional gems from the dry-rb ecosystem
 
 ## Development
 
