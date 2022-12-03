@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 module ValidatedContext
-  ValidatedKey = Struct.new(:label, :type) do
+  class ValidatedKey
+    attr_reader :label, :type, :message
+
+    def initialize(label, type, message: nil)
+      @label = label
+      @type = type
+      @message = message
+    end
+
     def to_sym
       label.to_sym
     end

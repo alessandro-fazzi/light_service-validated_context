@@ -12,6 +12,7 @@ module ValidatedContext; end
 module LightService
   class Context
     ValidatedKey = ::ValidatedContext::ValidatedKey
+    FailOnValidationError = ::ValidatedContext::FailOnValidationError
     prepend ::ValidatedContext::Context
 
     class KeyVerifier

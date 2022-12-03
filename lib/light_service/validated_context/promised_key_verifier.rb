@@ -18,14 +18,12 @@ module ValidatedContext
       action.promised_keys
     end
 
-    def throw_error_predicate(keys)
+    def throw_error_predicate(_keys)
       type_check_and_coerce_keys!(raw_keys)
 
-      keys_are_all_present = are_all_keys_in_context?(keys)
+      return false if are_all_keys_valid?
 
-      return false if are_all_keys_valid? && keys_are_all_present
-
-      true
+      should_throw_on_validation_error?
     end
   end
 end
