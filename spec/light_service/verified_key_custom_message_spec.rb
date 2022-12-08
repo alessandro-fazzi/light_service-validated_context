@@ -17,7 +17,7 @@ RSpec.describe 'A failed action with custom validation message on its key' do
   context 'when custom message is a symbol' do
     let(:action) { ActionWithCustomValidationMessageI18n }
 
-    it 'populates message with custom error' do
+    it 'populates message with custom error from I18n' do
       expect { result }
         .to raise_error(LightService::ExpectedKeysNotInContextError)
         .with_message('Custom validation message from i18n')

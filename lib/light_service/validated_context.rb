@@ -1,30 +1,35 @@
 # frozen_string_literal: true
 
 require "zeitwerk"
-loader = Zeitwerk::Loader.for_gem
+loader = Zeitwerk::Loader.new
+loader.tag = 'LightService::I18n'
+loader.inflector = Zeitwerk::GemInflector.new(__FILE__)
+loader.push_dir(__dir__, :namespace => LightService)
 loader.setup
 
 require 'light-service'
 require 'dry-types'
 
-module ValidatedContext; end
+module LightService
+  module ValidatedContext; end
+end
 
 module LightService
   class Context
-    ValidatedKey = ::ValidatedContext::ValidatedKey
-    FailOnValidationError = ::ValidatedContext::FailOnValidationError
-    prepend ::ValidatedContext::Context
+    ValidatedKey = LightService::ValidatedContext::ValidatedKey
+    FailOnValidationError = LightService::ValidatedContext::FailOnValidationError
+    prepend LightService::ValidatedContext::Context
 
     class KeyVerifier
-      prepend ::ValidatedContext::KeyVerifier
+      prepend LightService::ValidatedContext::KeyVerifier
     end
 
     class ExpectedKeyVerifier
-      prepend ::ValidatedContext::ExpectedKeyVerifier
+      prepend LightService::ValidatedContext::ExpectedKeyVerifier
     end
 
     class PromisedKeyVerifier
-      prepend ::ValidatedContext::PromisedKeyVerifier
+      prepend LightService::ValidatedContext::PromisedKeyVerifier
     end
   end
 
@@ -33,7 +38,7 @@ module LightService
   end
 end
 
-# Convenience namespace for implementor
+# Convenience alias for implementor
 Types = LightService::Types unless Module.const_defined?('Types')
 
 # Convenience alias for implementor
